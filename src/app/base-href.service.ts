@@ -1,18 +1,15 @@
-import { Component } from '@angular/core';
-import { BaseHrefService } from './base-href.service';
+import { Injectable, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+@Injectable({
+  providedIn: 'root'
 })
-export class AppComponent {
-  constructor(private baseHrefService: BaseHrefService) {
-    const isProduction = (window as any).appEnvironment.production;
-    if (isProduction) {
-      this.baseHrefService.setBaseHref('/production-path/');
-    } else {
-      this.baseHrefService.setBaseHref('/development-path/');
-    }
+export class BaseHrefService {
+
+  constructor(@Inject(DOCUMENT) private document: Document) {}
+
+  setBaseHref(href: string): void {
+    const base = this.document.querySelector('base');
+    base.setAttribute('href', href);
   }
 }
